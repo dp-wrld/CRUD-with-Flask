@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<title>CRUD with Flask</title>
+<body>
+  
+    <div style="margin-left: 30%; margin-top:50pt;margin-right: 30%; background-color: grey; ">
+      <h3>Add user</h3><hr>
+      <form method='post' action='{{url_for("add_user")}}'>
+        <div>
+          <label>User Name </label>
+          <input type='text' name='uname' required>
+        </div>
+        <div>
+          <label>Contact</label>
+          <input type='text' name='contact' required>
+        </div>
+        <hr>
+
+        <input type='submit' value='Submit'>
+      </form>
+    
+    </div>
+  
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<title>CRUD with Flask</title>
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+    </style>
+<body>
+  <h3 style="margin-left: 40%; margin-top: 50pt;">Flask - SQLite CRUD Application</h3>
+  <p style="margin-left: 60%;"><a href='{{url_for("add_user")}}'>+Add User</a></p>
+  <table style="background-color: grey; text-align: center; margin-left: 40%;">
+    <thead>
+      <th>No</th>
+      <th>Name</th>
+      <th>Contact</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </thead>
+    <tbody>
+      {% for row in datas %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{row.UNAME}}</td>
+          <td>{{row.CONTACT}}</td>
+          <td><a href='{{url_for("edit_user",uid=row.UID)}}' >Edit</a></td>
+          <td><a href='{{url_for("delete_user",uid=row.UID)}}'>Delete</a></td>
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</body>
+</html>

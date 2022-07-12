@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<title>CRUD with Flask</title>
+<body>
+  <div>
+    <div style="text-align: center;">
+      <h3>Edit user</h3><hr>
+      <form method='post' action='{{url_for("edit_user",uid=datas.UID)}}' style="background-color: grey; margin-left:30%; margin-right:30% ">
+        <div>
+          <label>User Name</label>
+          <input type='text' name='uname' required  value='{{datas.UNAME}}'>
+        </div>
+        <div >
+          <label>Contact</label>
+          <input type='text' name='contact' required  value='{{datas.CONTACT}}'>
+        </div>
+        <input type='submit' value='Submit'>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
