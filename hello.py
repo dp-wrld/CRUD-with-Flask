@@ -1,15 +1,32 @@
 from flask import Flask,render_template,request,redirect,url_for,flash
-import sqlite3 as sql
-app=Flask(__name__)
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost/crud'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Result(db.Model):
+    __tablename__ = 'result'
+
+    id = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String())
+    Contact = db.Column(db.String())
+    
+    def __init__(self, Name, Contact):
+        self.Name = Name
+        self.Contact = Contact
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 
 @app.route("/")
 def home():
-    con=sql.connect("db_web.db")
-    con.row_factory=sql.Row
-    cur=con.cursor()
-    cur.execute("select * from users")
-    data=cur.fetchall()
+    data = Result.query.all()
     return render_template("hello.html",datas=data)
 
 @app.route("/add_user",methods=['POST','GET'])
@@ -17,10 +34,9 @@ def add_user():
     if request.method=='POST':
         uname=request.form['uname']
         contact=request.form['contact']
-        con=sql.connect("db_web.db")
-        cur=con.cursor()
-        cur.execute("insert into users(UNAME,CONTACT) values (?,?)",(uname,contact))
-        con.commit()
+        data = Result(uname, contact)
+        db.session.add(data)
+        db.session.commit()
         flash('User Added','success')
         return redirect(url_for("home"))
     return render_template("add_user.html")
@@ -28,27 +44,24 @@ def add_user():
 @app.route("/edit_user/<string:uid>",methods=['POST','GET'])
 def edit_user(uid):
     if request.method=='POST':
-        uname=request.form['uname']
-        contact=request.form['contact']
-        con=sql.connect("db_web.db")
-        cur=con.cursor()
-        cur.execute("update users set UNAME=?,CONTACT=? where UID=?",(uname,contact,uid))
-        con.commit()
+        newname=request.form['uname']
+        newcontact=request.form['contact']
+        editData = Result.query.get(uid)
+
+        editData.Name = newname
+        editData.Contact = newcontact
+        db.session.commit()
         flash('User Updated','success')
         return redirect(url_for("home"))
-    con=sql.connect("db_web.db")
-    con.row_factory=sql.Row
-    cur=con.cursor()
-    cur.execute("select * from users where UID=?",(uid,))
-    data=cur.fetchone()
+    data = Result.query.get(uid)
+    
     return render_template("edit_user.html",datas=data)
     
 @app.route("/delete_user/<string:uid>",methods=['GET'])
 def delete_user(uid):
-    con=sql.connect("db_web.db")
-    cur=con.cursor()
-    cur.execute("delete from users where UID=?",(uid,))
-    con.commit()
+    delData = Result.query.filter_by(id=uid).first()
+    db.session.delete(delData)
+    db.session.commit()
     flash('User Deleted','warning')
     return redirect(url_for("home"))
     
