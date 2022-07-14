@@ -8,25 +8,38 @@
 <body>
   <h3 style="margin-left: 40%; margin-top: 50pt;">Flask - SQLite CRUD Application</h3>
   <p style="margin-left: 60%;"><a href='{{url_for("add_user")}}'>+Add User</a></p>
-  <table style="background-color: grey; text-align: center; margin-left: 40%;">
+  <table style="background-color: grey; text-align: center; margin-left: 20%;">
     <thead>
       <th>No</th>
       <th>Name</th>
-      <th>Contact</th>
+      <th>Bdate</th>
+      <th>Gender</th>
+      <th>Position</th>
+      <th>Age</th>
+      <th>Hobby</th>
+      <th>Image</th>
+      <th>Address</th>
       <th>Edit</th>
       <th>Delete</th>
     </thead>
     <tbody>
-      {% for row in datas %}
+      {% for row in data %}
         <tr>
           <td>{{loop.index}}</td>
-          <td>{{row.UNAME}}</td>
-          <td>{{row.CONTACT}}</td>
-          <td><a href='{{url_for("edit_user",uid=row.UID)}}' >Edit</a></td>
-          <td><a href='{{url_for("delete_user",uid=row.UID)}}'>Delete</a></td>
+          <td>{{row.Name}}</td>
+          <td>{{row.Bday}}</td>
+          <td>{{row.Gender}}</td>
+          <td>{{row.Position}}</td>
+          <td>{{row.Age}}</td>
+          <td>{{row.Hobby}}</td>
+          <td>{% if row.Image %}<img src="static/uploads/{{row.Image}}"  alt="Avatar" style="height: 100pt; width:190pt;">{% endif %}</td>
+          <td>{{row.Address}}</td>
+          <td><a href='{{url_for("edit_user",uid=row.id)}}' >Edit</a></td>
+          <td><a href='{{url_for("delete_user",uid=row.id)}}'>Delete</a></td>
         </tr>
       {%endfor%}
     </tbody>
   </table>
+  
 </body>
 </html>
